@@ -1,0 +1,341 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Фон задаём только на html. Если задать его ещё и на body, блочный бокс
+     body отрисуется ПОВЕРХ #bg-video с z-index: -2, и видео станет не видно. */
+  background: #0b0b12;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Фолбэк-градиент, если видео не загрузилось */
+/* Градиент рисуем на html — на body он перекрыл бы видео */
+html:has(body.video-failed) {
+  background:
+    radial-gradient(60% 60% at 30% 20%, rgba(90, 60, 160, 0.55), transparent 70%),
+    radial-gradient(50% 50% at 75% 80%, rgba(26, 60, 110, 0.5), transparent 70%),
+    #0b0b12;
+}
+
+body.video-failed #bg-video {
+  display: none;
+}
+
+/* ---------- Стартовый экран ---------- */
+
+#start-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  border: 0;
+  padding: 24px;
+  background: #000;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.4s ease, opacity 0.4s ease;
+}
+
+#start-screen:hover {
+  background: #08080c;
+}
+
+#start-screen .start-title {
+  font-size: clamp(22px, 6vw, 34px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+#start-screen .start-hint {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ---------- Контент ---------- */
+
+.content {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.content[hidden] {
+  display: none;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(28px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.card {
+  position: relative;
+  width: min(450px, 100%);
+  max-width: 100%;
+  padding: clamp(28px, 7vw, 60px) clamp(20px, 6vw, 40px);
+  /* Дымчатое стекло, а не светлая панель.
+     Замер по 1186 кадрам видео под карточкой: яркость от 16 до 150, в среднем
+     84. Затемнения в 0.28 хватает, чтобы белый текст держал контраст даже в
+     самом светлом кадре (150 -> 110), при этом 72% видео видно сквозь карточку.
+     Со светлым стеклом так не выйдет: для тёмного текста потребовалась бы
+     плотность 0.65, а это уже панель, а не стекло. */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 28%),
+    rgba(12, 11, 22, 0.28);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 15px;
+  text-align: center;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+
+.content.is-visible .card {
+  animation: slide-up 0.7s ease-out both;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.nickname {
+  margin: 10px 0 5px;
+  font-size: 24px;
+  color: #fff;
+  font-weight: 600;
+  /* Лёгкая тень под текстом: на контраст не влияет, но помогает глазу на
+     пёстром кадре, когда сквозь стекло просвечивает видео */
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
+
+.description {
+  margin: 0;
+  font-size: 16px;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+}
+
+.card-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.icon-button img {
+  width: 40px;
+  height: 40px;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ---------- Счётчик просмотров ---------- */
+
+.card-notification {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  width: 27px;
+  height: 27px;
+  cursor: default;
+}
+
+.card-notification img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card-notification .bubble {
+  position: absolute;
+  top: -20px;
+  right: -18px;
+  /* На тёмном стекле чёрный бабл был бы не виден — делаем белый с тёмным текстом */
+  background-color: rgba(255, 255, 255, 0.94);
+  color: #16151f;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 50px;
+  opacity: 0;
+  transform: scale(0.8);
+  transform-origin: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+}
+
+.card-notification:hover .bubble,
+.card-notification:focus-within .bubble {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* На тач-устройствах нет ховера — показываем счётчик сразу */
+@media (hover: none) {
+  .card-notification .bubble {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- Кнопка звука ---------- */
+
+.sound-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.sound-toggle:hover {
+  background: rgba(0, 0, 0, 0.65);
+  transform: scale(1.06);
+}
+
+.sound-toggle .sound-off {
+  display: none;
+}
+
+.sound-toggle[aria-pressed='false'] .sound-on {
+  display: none;
+}
+
+.sound-toggle[aria-pressed='false'] .sound-off {
+  display: block;
+}
+
+/* ---------- Диагностика (?debug=1) ---------- */
+
+.debug-panel {
+  position: fixed;
+  left: 8px;
+  bottom: 8px;
+  z-index: 999;
+  max-width: min(92vw, 460px);
+  max-height: 46vh;
+  overflow: auto;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #3d4a6b;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.88);
+  color: #b9ffb9;
+  font: 12px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+}
+
+/* ---------- Фокус и доступность ---------- */
+
+:focus-visible {
+  outline: 2px solid #7aa2ff;
+  outline-offset: 3px;
+}
+
+.noscript {
+  position: fixed;
+  inset: auto 0 40% 0;
+  z-index: 20;
+  margin: 0;
+  color: #fff;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

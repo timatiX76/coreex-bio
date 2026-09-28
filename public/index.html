@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coreex</title>
+  <meta name="description" content="Личные ссылки Coreex: Discord и Telegram.">
+  <meta name="theme-color" content="#0b0b12">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!--
+    Один источник: H.264 High + AAC, 1080p, ~20 сек.
+    H.264 понимают все браузеры, включая iOS-Safari, поэтому webm-дубль не нужен.
+  -->
+  <video id="bg-video" autoplay muted loop playsinline preload="auto" poster="poster.jpg" aria-hidden="true" tabindex="-1">
+    <source src="background.mp4" type="video/mp4">
+  </video>
+
+  <button type="button" id="start-screen">
+    <span class="start-title">Click to enter</span>
+    <span class="start-hint">со звуком</span>
+  </button>
+
+  <main class="content" id="main-content" hidden>
+    <div class="card">
+      <img src="ter.jpg" alt="Аватар Coreex" class="avatar" width="100" height="100">
+
+      <h1 class="nickname">Coreex</h1>
+      <p class="description">Альфа самец</p>
+
+      <nav class="card-buttons" aria-label="Ссылки на профиль">
+        <a href="https://discord.gg/dP6t3Kq8" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="Discord">
+          <img src="discord.svg" alt="" width="40" height="40">
+        </a>
+        <a href="https://t.me/cnoker4ik" target="_blank" rel="noopener noreferrer" class="icon-button" aria-label="Telegram">
+          <img src="telegram.svg" alt="" width="40" height="40">
+        </a>
+      </nav>
+
+      <div class="card-notification">
+        <img src="views.svg" alt="" width="27" height="27">
+        <span class="bubble" id="views">623</span>
+      </div>
+    </div>
+
+    <button type="button" class="sound-toggle" id="sound-toggle" aria-pressed="true" aria-label="Выключить звук">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path class="sound-on" fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 2.2v2.1a7.8 7.8 0 0 1 0 15.4v2.1a9.9 9.9 0 0 0 0-19.6z"/>
+        <path class="sound-off" fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4zm17.7-.7-1.4-1.4L17 10.2l-3.3-3.3-1.4 1.4 3.3 3.3-3.3 3.3 1.4 1.4 3.3-3.3 3.3 3.3 1.4-1.4-3.3-3.3 3.3-3.3z"/>
+      </svg>
+    </button>
+  </main>
+
+  <noscript>
+    <p class="noscript">Для просмотра ссылки включите JavaScript.</p>
+  </noscript>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
