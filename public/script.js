@@ -12,11 +12,8 @@
   let started = false;
   let soundOn = false;
 
-  // Громкость фоновой музыки. Поменяй число, если нужно громче/тише.
   const MUSIC_VOLUME = 0.3;
   video.volume = MUSIC_VOLUME;
-
-  /* ---------- Диагностика: ?debug=1 ---------- */
 
   const debug = new URLSearchParams(location.search).has('debug');
   let panel;
@@ -47,9 +44,6 @@
     log('userAgent    : ' + navigator.userAgent);
   }
 
-  /* ---------- Сеть и ошибки ---------- */
-
-  // Ошибка прилетает на <source> и не всплывает до <video>
   video.querySelectorAll('source').forEach((s) => {
     s.addEventListener('error', () => {
       log('source error: ' + s.getAttribute('src'));
@@ -69,8 +63,6 @@
     markVideoFailed();
   });
 
-  /* ---------- Звук ---------- */
-
   function setSound(on) {
     soundOn = on;
     video.volume = MUSIC_VOLUME;
@@ -79,8 +71,6 @@
     soundToggle.setAttribute('aria-label', on ? 'Выключить звук' : 'Включить звук');
     log('sound=' + (on ? 'on' : 'off'));
   }
-
-  /* ---------- Старт ---------- */
 
   function enter() {
     if (started) {
@@ -95,9 +85,6 @@
     void mainContent.offsetWidth;
     mainContent.classList.add('is-visible');
 
-    // Видео обязано оставаться mute до жеста пользователя: Chrome не
-    // проигрывает unmuted-элемент, разжатый вне жеста. Поэтому сначала
-    // play() с mute, и только потом снимаем mute в этом же жесте.
     video.play()
       .then(() => {
         log('play() resolved, muted=' + video.muted);
@@ -124,14 +111,10 @@
 
   setSound(false);
 
-  /* ---------- Счётчик просмотров ---------- */
-
   const viewsEl = document.getElementById('views');
   const FALLBACK_VIEWS = 623;
   const VIEWS_URL = '/api/count';
 
-  // Постоянный id браузера. localStorage может быть недоступен (приватный
-  // режим), тогда считаем визит обычным, но не падаем.
   function visitorId() {
     const KEY = 'bv-id';
     try {
@@ -172,7 +155,7 @@
       viewsEl.textContent = formatViews(data.count);
       log('views=' + data.count);
     } catch (e) {
-      // Счётчик не критичен: показываем то, что было захардкожено
+      
       viewsEl.textContent = formatViews(FALLBACK_VIEWS);
       log('views error: ' + e.message);
     }

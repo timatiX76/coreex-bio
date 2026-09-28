@@ -2,25 +2,16 @@ name = "solitary-mouse-58d1"
 main = "src/index.js"
 compatibility_date = "2026-09-01"
 
-# Воркер сначала обрабатывает /api/*, всё остальное берёт из public/
 [assets]
 directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/api/*"]
-# Любой неизвестный путь отдаёт index.html, а не 404 — старые ссылки на bio.html продолжат работать
 not_found_handling = "single-page-application"
 
-# Счётчик стартует с этого числа, чтобы не начинать с нуля.
-# После первого захода значение живёт в KV, и эта настройка больше не участвует.
 [vars]
 INITIAL_COUNT = "623"
 
-# KV-хранилище создаётся один раз вручную:
-#   npx wrangler kv namespace create VIEWS
-# Скопируй выведенный id в поле id ниже
 [[kv_namespaces]]
 binding = "VIEWS"
 id = "79c6dc70370d48018ca4dc372a42e4e1"
 
-# Токен для сброса счётчика не хранится в файле, а задаётся секретом:
-#   npx wrangler secret put RESET_TOKEN

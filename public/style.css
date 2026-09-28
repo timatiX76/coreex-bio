@@ -5,8 +5,7 @@
 }
 
 html {
-  /* Фон задаём только на html. Если задать его ещё и на body, блочный бокс
-     body отрисуется ПОВЕРХ #bg-video с z-index: -2, и видео станет не видно. */
+  
   background: #0b0b12;
 }
 
@@ -30,8 +29,6 @@ body {
   pointer-events: none;
 }
 
-/* Фолбэк-градиент, если видео не загрузилось */
-/* Градиент рисуем на html — на body он перекрыл бы видео */
 html:has(body.video-failed) {
   background:
     radial-gradient(60% 60% at 30% 20%, rgba(90, 60, 160, 0.55), transparent 70%),
@@ -42,8 +39,6 @@ html:has(body.video-failed) {
 body.video-failed #bg-video {
   display: none;
 }
-
-/* ---------- Стартовый экран ---------- */
 
 #start-screen {
   position: fixed;
@@ -87,8 +82,6 @@ body.video-failed #bg-video {
   50% { opacity: 1; }
 }
 
-/* ---------- Контент ---------- */
-
 .content {
   position: fixed;
   inset: 0;
@@ -119,12 +112,7 @@ body.video-failed #bg-video {
   width: min(450px, 100%);
   max-width: 100%;
   padding: clamp(28px, 7vw, 60px) clamp(20px, 6vw, 40px);
-  /* Дымчатое стекло, а не светлая панель.
-     Замер по 1186 кадрам видео под карточкой: яркость от 16 до 150, в среднем
-     84. Затемнения в 0.28 хватает, чтобы белый текст держал контраст даже в
-     самом светлом кадре (150 -> 110), при этом 72% видео видно сквозь карточку.
-     Со светлым стеклом так не выйдет: для тёмного текста потребовалась бы
-     плотность 0.65, а это уже панель, а не стекло. */
+  
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 28%),
     rgba(12, 11, 22, 0.28);
@@ -157,8 +145,7 @@ body.video-failed #bg-video {
   font-size: 24px;
   color: #fff;
   font-weight: 600;
-  /* Лёгкая тень под текстом: на контраст не влияет, но помогает глазу на
-     пёстром кадре, когда сквозь стекло просвечивает видео */
+  
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
 }
 
@@ -201,8 +188,6 @@ body.video-failed #bg-video {
   background: rgba(255, 255, 255, 0.16);
 }
 
-/* ---------- Счётчик просмотров ---------- */
-
 .card-notification {
   position: absolute;
   bottom: 15px;
@@ -222,7 +207,7 @@ body.video-failed #bg-video {
   position: absolute;
   top: -20px;
   right: -18px;
-  /* На тёмном стекле чёрный бабл был бы не виден — делаем белый с тёмным текстом */
+  
   background-color: rgba(255, 255, 255, 0.94);
   color: #16151f;
   font-size: 13px;
@@ -244,15 +229,12 @@ body.video-failed #bg-video {
   transform: scale(1);
 }
 
-/* На тач-устройствах нет ховера — показываем счётчик сразу */
 @media (hover: none) {
   .card-notification .bubble {
     opacity: 1;
     transform: scale(1);
   }
 }
-
-/* ---------- Кнопка звука ---------- */
 
 .sound-toggle {
   position: fixed;
@@ -292,8 +274,6 @@ body.video-failed #bg-video {
   display: block;
 }
 
-/* ---------- Диагностика (?debug=1) ---------- */
-
 .debug-panel {
   position: fixed;
   left: 8px;
@@ -313,8 +293,6 @@ body.video-failed #bg-video {
   word-break: break-word;
   text-align: left;
 }
-
-/* ---------- Фокус и доступность ---------- */
 
 :focus-visible {
   outline: 2px solid #7aa2ff;
