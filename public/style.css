@@ -68,7 +68,7 @@ body.video-failed #bg-video {
 #start-screen .start-title {
   font-size: clamp(22px, 6vw, 34px);
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
 }
 
 #start-screen .start-hint {
@@ -114,20 +114,88 @@ body.video-failed #bg-video {
   padding: clamp(28px, 7vw, 60px) clamp(20px, 6vw, 40px);
   
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 30%),
+    radial-gradient(120% 90% at 50% 115%, rgba(120, 140, 255, 0.10), transparent 60%),
     rgba(12, 11, 22, 0.28);
   backdrop-filter: blur(20px) saturate(1.5);
   -webkit-backdrop-filter: blur(20px) saturate(1.5);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 15px;
   text-align: center;
+  overflow: hidden;
   box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+  transition: transform 0.18s ease-out;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -30%;
+  width: 45%;
+  background: linear-gradient(105deg,
+    transparent,
+    rgba(255, 255, 255, 0.10) 42%,
+    rgba(255, 255, 255, 0.20) 50%,
+    rgba(255, 255, 255, 0.10) 58%,
+    transparent);
+  transform: translateX(-120%) skewX(-12deg);
+  animation: sheen 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sheen {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+  }
+  35%, 100% {
+    transform: translateX(480%) skewX(-12deg);
+  }
 }
 
 .content.is-visible .card {
   animation: slide-up 0.7s ease-out both;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.content.is-visible .avatar {
+  animation: rise 0.55s ease-out both;
+}
+
+.content.is-visible .nickname {
+  animation: rise 0.55s 0.08s ease-out both;
+}
+
+.content.is-visible .description {
+  animation: rise 0.55s 0.16s ease-out both;
+}
+
+.content.is-visible .card-buttons {
+  animation: rise 0.55s 0.24s ease-out both;
 }
 
 .avatar {
@@ -137,15 +205,18 @@ body.video-failed #bg-video {
   object-fit: cover;
   margin-bottom: 15px;
   border: 2px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.08),
+    0 0 32px rgba(255, 255, 255, 0.22),
+    0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .nickname {
   margin: 10px 0 5px;
-  font-size: 24px;
+  font-size: 27px;
   color: #fff;
   font-weight: 600;
-  
+  letter-spacing: 0.02em;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
 }
 
@@ -167,25 +238,38 @@ body.video-failed #bg-video {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   padding: 0;
-  border: 0;
-  border-radius: 12px;
-  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .icon-button img {
-  width: 40px;
-  height: 40px;
+  width: 26px;
+  height: 26px;
 }
 
 .icon-button:hover,
 .icon-button:focus-visible {
   transform: translateY(-3px);
   background: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.4),
+    0 0 22px rgba(255, 255, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.icon-button:active {
+  transform: translateY(-1px) scale(0.96);
 }
 
 .card-notification {
@@ -207,7 +291,6 @@ body.video-failed #bg-video {
   position: absolute;
   top: -20px;
   right: -18px;
-  
   background-color: rgba(255, 255, 255, 0.94);
   color: #16151f;
   font-size: 13px;

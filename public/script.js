@@ -161,5 +161,38 @@
     }
   }
 
+  const card = mainContent.querySelector('.card');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  let entered = false;
+  let tiltRaf = 0;
+
+  if (card && !reduceMotion.matches && finePointer.matches) {
+    card.addEventListener('animationend', (e) => {
+      if (e.animationName === 'slide-up') {
+        entered = true;
+        card.style.animationName = 'none';
+      }
+    });
+    mainContent.addEventListener('pointermove', (e) => {
+      if (!started || !entered) {
+        return;
+      }
+      cancelAnimationFrame(tiltRaf);
+      tiltRaf = requestAnimationFrame(() => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform =
+          'perspective(900px) rotateX(' + (-py * 6).toFixed(2) +
+          'deg) rotateY(' + (px * 8).toFixed(2) + 'deg)';
+      });
+    });
+    mainContent.addEventListener('pointerleave', () => {
+      cancelAnimationFrame(tiltRaf);
+      card.style.transform = '';
+    });
+  }
+
   loadViews();
 })();
